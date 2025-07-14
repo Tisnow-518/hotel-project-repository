@@ -1,57 +1,63 @@
--- ========================================
--- Hotel Management System Database Schema
--- ========================================
 
--- 创建数据库（如果不存在）
-CREATE DATABASE IF NOT EXISTS hotel_management DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE hotel_management;
+-- 创建数据库
 
--- ========================================
--- 1. 分店表（branch）
--- ========================================
-DROP TABLE IF EXISTS `branch`;
-CREATE TABLE `branch` (
-  `branchid` int NOT NULL AUTO_INCREMENT COMMENT '主键，自增',
-  `name` varchar(100) NOT NULL COMMENT '分店名称',
-  `address` varchar(255) NOT NULL COMMENT '分店地址',
-  `phone` varchar(30) NOT NULL COMMENT '分店电话',
-  `room_count` int NOT NULL DEFAULT 0 COMMENT '房间总数',
-  `photo_url` varchar(255) DEFAULT NULL COMMENT '分店照片URL',
-  `created_by` varchar(50) DEFAULT NULL COMMENT '创建人',
-  `updated_by` varchar(50) DEFAULT NULL COMMENT '修改人',
-  `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除（0未删，1已删）',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`branchid`),
-  UNIQUE KEY `uk_branch_name` (`name`),
-  KEY `idx_branch_name` (`name`),
-  KEY `idx_branch_deleted` (`is_deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='分店信息表';
+create database hoteldb;
+
+
+-- 创建用户
+
+create user hoteladmin identified by 'abc123';
+
+grant all on hoteldb.* to hoteladmin;
+
+
+-- 分店表
+
+create table branch (
+    branch_id int primary key auto_increment,
+    branch_name varchar(100) not null,
+    branch_address varchar(255) not null,
+    branch_phone varchar(30) not null,
+    room_count int not null default 0,
+    branch_photo_url varchar(255) default null,
+    create_time datetime not null,
+    update_time datetime,
+    created_by char(6) not null,
+    updated_by char(6),
+    is_deleted int not null
+);
+
+-- 插入示例分店数据
+
+INSERT INTO branch (branch_name, branch_address, branch_phone, room_count, create_time, created_by, is_deleted) VALUES
+    ('北京朝阳店', '北京市朝阳区建国门外大街1号', '010-12345678', 50, now(), '000000', 0),
+    ('上海浦东店', '上海市浦东新区陆家嘴环路1000号', '021-87654321', 80, now(), '000101', 0),
+    ('广州天河店', '广州市天河区天河路123号', '020-11111111', 60, now(), '000202', 0);
 
 -- ========================================
 -- 2. 房间表（room）
 -- ========================================
 DROP TABLE IF EXISTS `room`;
 CREATE TABLE `room` (
-  `roomid` int NOT NULL AUTO_INCREMENT COMMENT '主键，自增',
-  `room_branchid` int NOT NULL COMMENT '分店ID，外键',
+  `room_id` int NOT NULL AUTO_INCREMENT COMMENT '主键，自增',
+  `room_branch_id` int NOT NULL COMMENT '分店ID，外键',
   `room_no` varchar(20) NOT NULL COMMENT '房号',
   `room_type` varchar(50) NOT NULL COMMENT '房间类型',
-  `facilities` varchar(255) DEFAULT NULL COMMENT '设施（逗号分隔或JSON）',
-  `status` varchar(20) NOT NULL DEFAULT '未入住' COMMENT '当前状态',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `room_facilities` varchar(255) DEFAULT NULL COMMENT '设施（逗号分隔或JSON）',
+  `room_status` varchar(20) NOT NULL DEFAULT '未入住' COMMENT '当前状态',
+  `room_remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `created_by` varchar(50) DEFAULT NULL COMMENT '创建人',
   `updated_by` varchar(50) DEFAULT NULL COMMENT '修改人',
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除（0未删，1已删）',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`roomid`),
-  UNIQUE KEY `uk_room_branch_no` (`room_branchid`, `room_no`),
+  PRIMARY KEY (`room_id`),
+  UNIQUE KEY `uk_room_branch_no` (`room_branch_id`, `room_no`),
   KEY `idx_room_type` (`room_type`),
-  KEY `idx_room_status` (`status`),
+  KEY `idx_room_status` (`room_status`),
   KEY `idx_room_deleted` (`is_deleted`),
-  CONSTRAINT `fk_room_branch` FOREIGN KEY (`room_branchid`) REFERENCES `branch` (`branchid`) ON DELETE CASCADE
+  CONSTRAINT `fk_room_branch` FOREIGN KEY (`room_branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='房间信息表';
 
 -- ========================================
@@ -59,14 +65,14 @@ CREATE TABLE `room` (
 -- ========================================
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `userid` int NOT NULL AUTO_INCREMENT COMMENT '主键，自增',
+  `user_id` int NOT NULL AUTO_INCREMENT COMMENT '主键，自增',
   `username` varchar(50) NOT NULL COMMENT '用户名',
   `password` varchar(100) NOT NULL COMMENT '密码（加密）',
   `role` varchar(20) NOT NULL DEFAULT 'USER' COMMENT '角色',
   `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除（0未删，1已删）',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`userid`),
+  PRIMARY KEY (`user_id`),
   UNIQUE KEY `uk_user_username` (`username`),
   KEY `idx_user_deleted` (`is_deleted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户信息表';
@@ -80,14 +86,10 @@ INSERT INTO `user` (`username`, `password`, `role`, `is_deleted`) VALUES
 ('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXIGkqJGtIBPTYBJTzVmyaOZIna', 'ADMIN', 0),
 ('manager', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXIGkqJGtIBPTYBJTzVmyaOZIna', 'MANAGER', 0);
 
--- 插入示例分店数据
-INSERT INTO `branch` (`name`, `address`, `phone`, `room_count`, `photo_url`, `created_by`, `is_deleted`) VALUES
-('北京朝阳店', '北京市朝阳区建国门外大街1号', '010-12345678', 50, 'https://example.com/photos/beijing.jpg', 'admin', 0),
-('上海浦东店', '上海市浦东新区陆家嘴环路1000号', '021-87654321', 80, 'https://example.com/photos/shanghai.jpg', 'admin', 0),
-('广州天河店', '广州市天河区天河路123号', '020-11111111', 60, 'https://example.com/photos/guangzhou.jpg', 'admin', 0);
+
 
 -- 插入示例房间数据
-INSERT INTO `room` (`room_branchid`, `room_no`, `room_type`, `facilities`, `status`, `remark`, `created_by`, `is_deleted`) VALUES
+INSERT INTO `room` (`room_branch_id`, `room_no`, `room_type`, `room_facilities`, `room_status`, `room_remark`, `created_by`, `is_deleted`) VALUES
 -- 北京朝阳店房间
 (1, '101', '普单人间', '平面液晶电视,空调,互联网接入', '未入住', '朝南房间，采光良好', 'admin', 0),
 (1, '102', '普双人间', '平面液晶电视,冰箱,空调,互联网接入', '有住客', '', 'admin', 0),
@@ -112,20 +114,20 @@ INSERT INTO `room` (`room_branchid`, `room_no`, `room_type`, `facilities`, `stat
 -- 创建房间统计视图
 CREATE VIEW `v_branch_room_stats` AS
 SELECT
-    b.branchid as branch_id,
-    b.name as branch_name,
+    b.branch_id as branch_id,
+    b.branch_name as branch_name,
     b.room_count as total_rooms,
-    COUNT(r.roomid) as actual_rooms,
-    SUM(CASE WHEN r.status = '未入住' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as available_rooms,
-    SUM(CASE WHEN r.status = '有住客' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as occupied_rooms,
-    SUM(CASE WHEN r.status = '已预订' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as reserved_rooms,
-    SUM(CASE WHEN r.status = '保洁中' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as cleaning_rooms,
-    SUM(CASE WHEN r.status = '已退房未保洁' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as checkout_rooms,
-    SUM(CASE WHEN r.status = '维修中' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as maintenance_rooms
+    COUNT(r.room_id) as actual_rooms,
+    SUM(CASE WHEN r.room_status = '未入住' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as available_rooms,
+    SUM(CASE WHEN r.room_status = '有住客' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as occupied_rooms,
+    SUM(CASE WHEN r.room_status = '已预订' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as reserved_rooms,
+    SUM(CASE WHEN r.room_status = '保洁中' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as cleaning_rooms,
+    SUM(CASE WHEN r.room_status = '已退房未保洁' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as checkout_rooms,
+    SUM(CASE WHEN r.room_status = '维修中' AND r.is_deleted = 0 THEN 1 ELSE 0 END) as maintenance_rooms
 FROM `branch` b
-LEFT JOIN `room` r ON b.branchid = r.room_branchid AND r.is_deleted = 0
+LEFT JOIN `room` r ON b.branch_id = r.room_branch_id AND r.is_deleted = 0
 WHERE b.is_deleted = 0
-GROUP BY b.branchid, b.name, b.room_count;
+GROUP BY b.branch_id, b.branch_name, b.room_count;
 
 -- ========================================
 -- 数据库初始化完成
