@@ -1,5 +1,8 @@
 package com.abcd.domain;
 
+import lombok.Data;
+
+@Data
 public class Branch {
 
     private Integer branchId;
