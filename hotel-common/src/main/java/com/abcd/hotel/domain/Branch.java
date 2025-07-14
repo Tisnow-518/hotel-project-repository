@@ -19,7 +19,7 @@ public class Branch {
     private String branchAddress;
     private String branchPhone;
     private int roomCount;
-    private String branchPicUrl;
+    private String branchPhotoUrl;
 
     //类别创建时间  (执行MP的自动FILL操作，当增加记录的时候）
     @TableField(fill = FieldFill.INSERT)
