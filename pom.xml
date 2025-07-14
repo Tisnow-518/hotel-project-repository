@@ -13,6 +13,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hotel</name>
 	<description>hotel</description>
+	<modules>
+		<module>hotel-service</module>
+	</modules>
 
 	<packaging>pom</packaging>
 
