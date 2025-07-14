@@ -1,9 +1,35 @@
-server:
-  port: 4000
-
+# 数据源配置文件
 spring:
   application:
     name: hotel-service-branch
   cloud:
     nacos:
       server-addr: 127.0.0.1:8848
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hoteldb?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: hoteladmin
+    password: abc123
+
+# mybatis-plus配置文件
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.abcd.hotel.domain
+  configuration:
+      map-underscore-to-camel-case: true
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+      cache-enabled: false
+  global-config:
+    db-config:
+      logic-delete-field: is_deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  level:
+    root: info
+
+server:
+  servlet:
+    context-path: /api
+  port: 4000
