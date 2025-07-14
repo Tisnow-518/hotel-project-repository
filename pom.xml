@@ -15,8 +15,8 @@
 	<description>hotel</description>
 	<modules>
 		<module>hotel-service</module>
-        <module>hotel-common</module>
-    </modules>
+		<module>hotel-common</module>
+	</modules>
 
 	<packaging>pom</packaging>
 
@@ -43,6 +43,12 @@
 				<version>${spring-cloud-alibaba.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<!--mybatisPlus依赖-->
+			<dependency>
+				<groupId>com.baomidou</groupId>
+				<artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+				<version>3.5.12</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
