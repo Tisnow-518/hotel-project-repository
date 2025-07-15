@@ -51,6 +51,43 @@ public class RoomController {
         return ResponseResult.error("加载房间列表失败!");
     }
 
+    @Operation(summary = "根据房间类型获取房间列表")
+    @GetMapping("/roomType/{roomType}")
+    public ResponseResult <List<Room>> loadRoomsByRoomType(@PathVariable String roomType) throws Exception {
+
+        List<Room> rooms = roomService.loadRoomsByRoomType(roomType);
+
+        if(rooms == null) {
+            log.info("加载房间列表失败!");
+        }
+        else {
+            ResponseResult responseResult = ResponseResult.success(rooms);
+            log.info("房间信息加载成功，房间类型为: " + roomType + ", 房间数量: "+rooms.size());
+            responseResult.setMsg("房间信息加载成功，房间类型为: " + roomType + ", 房间数量: "+rooms.size());
+            return responseResult;
+        }
+        return ResponseResult.error("加载房间列表失败!");
+    }
+
+    @Operation(summary = "根据房间状态获取房间列表")
+    @GetMapping("/roomStatus/{roomStatus}")
+    public ResponseResult <List<Room>> loadRoomsByRoomStatus(@PathVariable String roomStatus) throws Exception {
+
+        List<Room> rooms = roomService.loadRoomsByRoomStatus(roomStatus);
+
+        if(rooms == null) {
+            log.info("加载房间列表失败!");
+        }
+        else {
+            ResponseResult responseResult = ResponseResult.success(rooms);
+            log.info("房间信息加载成功，房间状态为: " + roomStatus + ", 房间数量: "+rooms.size());
+            responseResult.setMsg("房间信息加载成功，房间状态为: " + roomStatus + ", 房间数量: "+rooms.size());
+            return responseResult;
+        }
+        return ResponseResult.error("加载房间列表失败!");
+    }
+
+
 
     @Operation(summary = "加载房间分页信息")
     @GetMapping("list")  /// api/room/list?pageNo=

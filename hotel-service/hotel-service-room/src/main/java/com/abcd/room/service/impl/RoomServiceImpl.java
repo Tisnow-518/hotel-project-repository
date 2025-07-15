@@ -26,6 +26,30 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements Ro
     }
 
     @Override
+    public List<Room> loadRoomsByRoomType(String roomType) {
+
+        LambdaQueryWrapper<Room> wrapper = new LambdaQueryWrapper<>();
+
+        wrapper.eq(Room::getRoomType, roomType);
+        wrapper.orderByAsc(Room::getRoomId);
+
+        return this.list(wrapper);
+
+    }
+
+    @Override
+    public List<Room> loadRoomsByRoomStatus(String roomStatus) {
+
+        LambdaQueryWrapper<Room> wrapper = new LambdaQueryWrapper<>();
+
+        wrapper.eq(Room::getRoomStatus, roomStatus);
+        wrapper.orderByAsc(Room::getRoomId);
+
+        return this.list(wrapper);
+
+    }
+
+    @Override
     public Page<Room> loadPagedRoom(int pageNo, int pageSize) {
 
         Page<Room> page = new Page<>(pageNo, pageSize);

@@ -13,6 +13,16 @@ public interface RoomService extends IService<Room> {
      */
     List<Room> loadRoomsByBranchId(Integer branchId);
 
+    /**
+     * 根据房间类型加载房间列表
+     */
+    List<Room> loadRoomsByRoomType(String roomType);
+
+    /**
+     * 根据房间状态加载房间列表
+     */
+    List<Room> loadRoomsByRoomStatus(String roomStatus);
+
     Page<Room> loadPagedRoom(int pageNo, int pageSize);
 
 }
