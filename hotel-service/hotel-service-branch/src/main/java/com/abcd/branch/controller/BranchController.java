@@ -4,6 +4,8 @@ import com.abcd.hotel.domain.Branch;
 import com.abcd.branch.service.BranchService;
 import com.abcd.hotel.utils.ResponseResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +13,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/branch")
 @Slf4j
+@Tag(name="类别控制器")
 public class BranchController {
 
     @Autowired
     private BranchService branchService;
 
+    @Operation(summary="创建分支")
     @PostMapping("/save")
     public String create(@RequestBody Branch branch) throws Exception {
 
@@ -27,7 +31,9 @@ public class BranchController {
 
     }
 
-    @GetMapping("list")   ///api/goods/list?pageNo=1
+
+    @Operation(summary = "分页")
+    @GetMapping("list")   //api/
     public ResponseResult loadPagedList(int pageNo) throws Exception{
         //页面规模默认为8条
 //        System.out.println("load goods ,pageNo:"+pageNo);
