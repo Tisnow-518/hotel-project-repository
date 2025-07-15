@@ -16,7 +16,7 @@ public class Branch extends ValueObject {
     private String branchName;
     private String branchAddress;
     private String branchPhone;
-    private int roomCount;
+    private Integer roomCount;
     private String branchPicUrl;
 
 }

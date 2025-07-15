@@ -12,12 +12,12 @@ public abstract class ValueObject {
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     //类别修改时间
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     @TableField(fill = FieldFill.INSERT)
     private String createdBy;
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;
 
     @TableLogic

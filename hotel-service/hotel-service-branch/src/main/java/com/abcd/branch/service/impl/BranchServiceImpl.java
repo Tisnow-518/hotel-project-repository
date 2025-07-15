@@ -13,7 +13,7 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
     @Override
     public Page<Branch> loadPagedBranch(int pageNo, int pageSize) {
 
-        Page<Branch> page = new Page<>(pageNo,pageSize);
+        Page<Branch> page = new Page<>(pageNo, pageSize);
         return this.page(page);
 
     }

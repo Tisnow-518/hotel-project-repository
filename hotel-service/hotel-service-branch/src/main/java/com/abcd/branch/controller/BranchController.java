@@ -33,12 +33,10 @@ public class BranchController {
 
 
     @Operation(summary = "分页")
-    @GetMapping("list")   //api/
+    @GetMapping("list")  /// api/branch/list?pageNo=
     public ResponseResult loadPagedList(int pageNo) throws Exception{
-        //页面规模默认为8条
-//        System.out.println("load goods ,pageNo:"+pageNo);
 
-        Page<Branch> page = branchService.loadPagedBranch(pageNo, 8);
+        Page<Branch> page = branchService.loadPagedBranch(pageNo, 10);
 
         if(page!=null)
             return ResponseResult.success(page);
