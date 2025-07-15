@@ -5,60 +5,57 @@
 create database hoteldb;
 
 
--- 创建用户
+-- 创建用户并授权
 
 create user hoteladmin identified by 'abc123';
 
 grant all on hoteldb.* to hoteladmin;
 
 
--- 分店表
+-- 创建分店表
 
 create table branch (
-    branch_id int primary key auto_increment,
-    branch_name varchar(100) not null,
-    branch_address varchar(255) not null,
-    branch_phone varchar(30) not null,
-    room_count int not null default 0,
-    branch_photo_url varchar(255) default null,
-    create_time datetime not null,
-    update_time datetime,
-    created_by char(6) not null,
-    updated_by char(6),
-    is_deleted int not null
+    branch_id       int primary key auto_increment,
+    branch_name     varchar(40) not null,
+    branch_address  varchar(200) not null,
+    branch_phone    varchar(30) not null,
+    room_count      int not null default 0,
+    branch_pic_url  varchar(300),
+    create_time     datetime not null,
+    update_time     datetime,
+    created_by      char(6) not null,
+    updated_by      char(6),
+    is_deleted      int not null
 );
 
--- 插入示例分店数据
 
-INSERT INTO branch (branch_name, branch_address, branch_phone, room_count, create_time, created_by, is_deleted) VALUES
-    ('北京朝阳店', '北京市朝阳区建国门外大街1号', '010-12345678', 50, now(), '000000', 0),
-    ('上海浦东店', '上海市浦东新区陆家嘴环路1000号', '021-87654321', 80, now(), '000101', 0),
-    ('广州天河店', '广州市天河区天河路123号', '020-11111111', 60, now(), '000202', 0);
+-- 插入分店数据
 
--- ========================================
--- 2. 房间表（room）
--- ========================================
-DROP TABLE IF EXISTS `room`;
-CREATE TABLE `room` (
-  `room_id` int NOT NULL AUTO_INCREMENT COMMENT '主键，自增',
-  `room_branch_id` int NOT NULL COMMENT '分店ID，外键',
-  `room_no` varchar(20) NOT NULL COMMENT '房号',
-  `room_type` varchar(50) NOT NULL COMMENT '房间类型',
-  `room_facilities` varchar(255) DEFAULT NULL COMMENT '设施（逗号分隔或JSON）',
-  `room_status` varchar(20) NOT NULL DEFAULT '未入住' COMMENT '当前状态',
-  `room_remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `created_by` varchar(50) DEFAULT NULL COMMENT '创建人',
-  `updated_by` varchar(50) DEFAULT NULL COMMENT '修改人',
-  `is_deleted` int NOT NULL DEFAULT 0 COMMENT '是否删除（0未删，1已删）',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`room_id`),
-  UNIQUE KEY `uk_room_branch_no` (`room_branch_id`, `room_no`),
-  KEY `idx_room_type` (`room_type`),
-  KEY `idx_room_status` (`room_status`),
-  KEY `idx_room_deleted` (`is_deleted`),
-  CONSTRAINT `fk_room_branch` FOREIGN KEY (`room_branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='房间信息表';
+insert into branch (branch_name, branch_address, branch_phone, created_by, updated_by)
+values
+    ('北京朝阳店', '北京市朝阳区建国门外大街1号', '010-12345678', '000001', '000001'),
+    ('上海浦东店', '上海市浦东新区陆家嘴环路1000号', '021-87654321', '000001', '000001'),
+    ('广州天河店', '广州市天河区天河路123号', '020-11111111', '000001', '000001');
+
+
+-- 创建房间表
+
+create table room (
+    room_id         int not null auto_increment,
+    branch_id       int not null,
+    room_no         varchar(20) not null,
+    room_type       varchar(50) not null,
+    room_facilities varchar(255) default null,
+    room_status     varchar(20) not null default '未入住',
+    room_remark     varchar(255) default null,
+    create_time     datetime not null default current_timestamp,
+    update_time     datetime default current_timestamp on update current_timestamp,
+    created_by      char(6) not null,
+    updated_by      char(6),
+    is_deleted      int not null default 0
+);
+
+
 
 -- ========================================
 -- 3. 用户表（user）

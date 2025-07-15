@@ -5,13 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("branch")
-public class Branch {
+public class Branch extends ValueObject {
 
     @TableId
     private Integer branchId;
@@ -19,21 +17,6 @@ public class Branch {
     private String branchAddress;
     private String branchPhone;
     private int roomCount;
-    private String branchPhotoUrl;
-
-    //类别创建时间  (执行MP的自动FILL操作，当增加记录的时候）
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-    //类别修改时间
-    @TableField(fill = FieldFill.UPDATE)
-    private Date updateTime;
-
-    @TableField(fill = FieldFill.INSERT)
-    private String createdBy;
-    @TableField(fill = FieldFill.UPDATE)
-    private String updatedBy;
-
-    @TableLogic
-    private int isDeleted;
+    private String branchPicUrl;
 
 }
