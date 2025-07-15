@@ -32,15 +32,68 @@ public class BranchController {
     @Autowired
     private RoomFeignClient roomFeignClient;
 
-    @Operation(summary="创建分店")
+    /**
+     * 创建分店，分店名称、地址、电话不能为空
+     * /api/branch/save
+     */
+    @Operation(summary = "创建分店")
     @PostMapping("/save")
-    public String createBranch(@RequestBody Branch branch) throws Exception {
+    public ResponseResult createBranch(@RequestBody Branch branch) throws Exception {
 
-        log.info("create branch, branch info: "+branch);
+        boolean result = branchService.save(branch);
 
-        branchService.save(branch);
+        if(result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("创建分店失败!");
 
-        return null;
+    }
+
+    /**
+     * 删除分店，需要指定分店编号
+     * /api/branch/delete/{branchId}
+     */
+    @Operation(summary = "删除分店")
+    @DeleteMapping("/delete/{branchId}")
+    public ResponseResult removeBranch(@PathVariable Integer branchId) throws Exception {
+
+        boolean result = branchService.removeById(branchId);
+
+        if(result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("删除分店失败!");
+
+    }
+
+    /**
+     * 修改分店，需要指定分店编号
+     * /api/branch/update
+     */
+    @Operation(summary = "修改分店")
+    @PutMapping("/update")
+    public ResponseResult updateBranch(@RequestBody Branch branch) throws Exception {
+
+        boolean result = branchService.updateById(branch);
+
+        if(result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("修改失败!");
+
+    }
+
+    /**
+     * 获取分店编号，需要指定分店名
+     * /api/branch/branchId/branchName/{branchName}
+     */
+    @Operation(summary = "根据分店名获取分店编号")
+    @GetMapping("/branchId/branchName/{branchName}")
+    public Integer getBranchIdByBranchName(@PathVariable String branchName) throws Exception {
+
+        Integer branchId = branchService.getBranchIdByBranchName(branchName);
+
+        return branchId;
 
     }
 

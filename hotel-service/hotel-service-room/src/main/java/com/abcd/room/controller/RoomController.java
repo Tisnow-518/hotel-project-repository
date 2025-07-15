@@ -2,6 +2,7 @@ package com.abcd.room.controller;
 
 import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.utils.ResponseResult;
+import com.abcd.room.Feign.BranchFeignClient;
 import com.abcd.room.service.RoomService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,33 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private BranchFeignClient branchFeignClient;
+
+    @Operation(summary = "根据分店名称获取房间列表")
+    @GetMapping("/branchName/{branchName}")
+    public ResponseResult <List<Room>> loadRoomsByBranchName(@PathVariable String branchName) throws Exception {
+
+        Integer branchId = branchFeignClient.getBranchIdByBranchName(branchName);
+
+        if(branchId==null)
+            return ResponseResult.error("加载房间列表失败!");
+        else {
+            List<Room> rooms = roomService.loadRoomsByBranchId(branchId);
+
+            if(rooms==null) {
+                log.info("加载房间列表失败!");
+            }
+            else {
+                ResponseResult responseResult = ResponseResult.success(rooms);
+                log.info("房间信息加载成功，分店编号为: "+branchId+", 房间数量: "+rooms.size());
+                responseResult.setMsg("房间信息加载成功，分店编号为: "+branchId+", 房间数量: "+rooms.size());
+                return responseResult;
+            }
+        }
+        return ResponseResult.error("加载房间列表失败!");
+    }
+
 
     @Operation(summary = "加载房间分页信息")
     @GetMapping("list")  /// api/room/list?pageNo=

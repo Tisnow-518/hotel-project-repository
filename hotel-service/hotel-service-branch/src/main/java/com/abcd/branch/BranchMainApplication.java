@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients  /// OpenFeign相关
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.abcd.branch", "com.abcd.hotel.config"})
+@SpringBootApplication(scanBasePackages = {"com.abcd.branch", "com.abcd.hotel.config","com.abcd.hotel.utils"})
 @MapperScan("com.abcd.hotel.mapper")
 public class BranchMainApplication {
 

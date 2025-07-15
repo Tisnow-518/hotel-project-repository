@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface BranchService extends IService<Branch> {
 
+    Integer getBranchIdByBranchName(String branchName);
+
     Page<Branch> loadPagedBranch(int pageNo, int pageSize);
 
 }
