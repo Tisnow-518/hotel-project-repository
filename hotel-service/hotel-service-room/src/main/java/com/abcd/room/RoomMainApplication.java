@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients
 @EnableDiscoveryClient
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.abcd.room", "com.abcd.hotel.config","com.abcd.hotel.utils"})
 @MapperScan("com.abcd.hotel.mapper")
 public class RoomMainApplication {
 
