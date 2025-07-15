@@ -1,9 +1,9 @@
 package com.abcd.hotel.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -11,12 +11,15 @@ import lombok.NoArgsConstructor;
 @TableName("branch")
 public class Branch extends ValueObject {
 
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer branchId;
     private String branchName;
     private String branchAddress;
     private String branchPhone;
     private Integer roomCount;
     private String branchPicUrl;
+
+    @TableField(exist = false)
+    private List<Room> roomList;
 
 }
