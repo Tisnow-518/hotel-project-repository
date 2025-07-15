@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/room")
 @Slf4j
-@Tag(name="类别控制器")
+@Tag(name="房间控制器")
 public class RoomController {
 
     @Autowired

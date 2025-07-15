@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/branch")
 @Slf4j
-@Tag(name="类别控制器")
+@Tag(name="分店控制器")
 public class BranchController {
 
     @Autowired
@@ -98,7 +98,7 @@ public class BranchController {
     }
 
 
-    @Operation(summary = "分页")
+    @Operation(summary = "分店分页")
     @GetMapping("list")  /// api/branch/list?pageNo=
     public ResponseResult loadPagedList(int pageNo) throws Exception{
 
@@ -113,6 +113,7 @@ public class BranchController {
     /**
      * 根据分店编号查询分店信息
      */
+    @Operation(summary = "根据分店编号查询分店信息")
     @GetMapping("/{branchId}")
     public ResponseResult getBranchById(@PathVariable Integer branchId) throws Exception {
 
