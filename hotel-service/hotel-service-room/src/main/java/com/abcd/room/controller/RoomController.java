@@ -104,6 +104,7 @@ public class RoomController {
     /**
      * 根据分店编号加载房间列表
      */
+    @Operation(summary = "根据分店编号加载房间列表")
     @GetMapping("/branchId/{branchId}")
     public ResponseResult <List<Room>> loadRoomsByBranchId(@PathVariable Integer branchId) throws Exception {
 
