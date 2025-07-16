@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -25,10 +22,6 @@ public class BranchController {
 
     @Autowired
     private BranchService branchService;
-    @Autowired
-    private RestTemplate restTemplate;
-    @Autowired
-    private LoadBalancerClient loadBalancerClient;
     @Autowired
     private RoomFeignClient roomFeignClient;
 
@@ -117,12 +110,9 @@ public class BranchController {
     @GetMapping("/branchId/branchName/{branchName}")
     public Integer getBranchIdByBranchName(@PathVariable String branchName) throws Exception {
 
-        Integer branchId = branchService.getBranchIdByBranchName(branchName);
-
-        return branchId;
+        return branchService.getBranchIdByBranchName(branchName);
 
     }
-
 
     @Operation(summary = "分店分页")
     @GetMapping("list")  /// api/branch/list?pageNo=
@@ -134,60 +124,6 @@ public class BranchController {
             return ResponseResult.success(page);
         else
             return ResponseResult.error("查询分店分页信息失败!");
-    }
-
-
-
-    /**
-     * 根据分店编号加载房间列表，直接使用url
-     */
-    private List<Room> loadRemoteRoomsByBranchId(Integer branchId){
-
-        String url = "http://localhost:5000/api/room/branchId/" + branchId;
-
-        ResponseResult resultObj = restTemplate.getForObject(url, ResponseResult.class);
-
-        List<Room> roomList = (List<Room>)resultObj.getData();
-
-        log.info("url: " + url + ", room count: " + roomList.size());
-
-        return roomList;
-
-    }
-
-    /**
-     * 根据分店编号加载房间列表，实现loadbalance
-     */
-    private List<Room> loadRemoteRoomsByBranchIdWithLoadBalance(Integer branchId){
-
-        ServiceInstance instance = loadBalancerClient.choose("hotel-service-room");
-        String url = instance.getUri() + "/api/room/branchId/" + branchId;
-
-        ResponseResult resultObj = restTemplate.getForObject(url, ResponseResult.class);
-
-        List<Room> roomList = (List<Room>)resultObj.getData();
-
-        log.info("url: " + url + ", room count: " + roomList.size());
-
-        return roomList;
-
-    }
-
-    /**
-     * 根据分店编号加载房间列表，使用注解实现loadbalance
-     */
-    private List<Room> loadRemoteRoomsByBranchIdWithLoadBalanceAnnotation(Integer branchId){
-
-        String url = "http://hotel-service-room/api/room/branchId/" + branchId;
-
-        ResponseResult resultObj = restTemplate.getForObject(url, ResponseResult.class);
-
-        List<Room> roomList = (List<Room>)resultObj.getData();
-
-        log.info("url: " + url + ", room count: " + roomList.size());
-
-        return roomList;
-
     }
 
 }
