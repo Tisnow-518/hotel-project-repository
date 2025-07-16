@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/user")  /// url前缀
+@RequestMapping("/api/auth")  /// url前缀
 public class AuthController {
 
     @Autowired
@@ -23,7 +24,7 @@ public class AuthController {
 
     /**
      * 登录
-     * /api/user/login
+     * /api/auth/login
      */
     @Operation(summary = "登录")
     @PostMapping("/login")
@@ -44,11 +45,9 @@ public class AuthController {
         return ResponseResult.success(data);
     }
 
-
-
     /**
      * 创建用户
-     * /api/user/save
+     * /api/auth/save
      */
     @Operation(summary = "创建用户")
     @PostMapping("/save")
@@ -65,7 +64,7 @@ public class AuthController {
 
     /**
      * 删除用户
-     * /api/user/delete/{userId}
+     * /api/auth/delete/{userId}
      */
     @Operation(summary = "删除用户")
     @DeleteMapping("/delete/{userId}")
@@ -82,7 +81,7 @@ public class AuthController {
 
     /**
      * 修改用户
-     * /api/user/update
+     * /api/auth/update
      */
     @Operation(summary = "修改用户")
     @PutMapping("/update")
@@ -98,8 +97,24 @@ public class AuthController {
     }
 
     /**
+     * 查询用户列表
+     * /api/auth/list
+     */
+    @Operation(summary = "查询用户列表")
+    @GetMapping("/list")
+    public ResponseResult loadUsers() throws Exception {
+        List<User> userList = authService.list();
+
+        if(!userList.isEmpty())
+            return ResponseResult.success(userList);
+        else
+            return ResponseResult.error("没有用户信息!");
+
+    }
+
+    /**
      * 根据用户编号获取用户信息
-     * /api/user/{userId}
+     * /api/auth/{userId}
      */
     @Operation(summary = "根据用户编号获取用户信息")
     @GetMapping("/{userId}")
