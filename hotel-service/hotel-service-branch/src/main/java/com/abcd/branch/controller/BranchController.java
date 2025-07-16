@@ -33,7 +33,7 @@ public class BranchController {
     private RoomFeignClient roomFeignClient;
 
     /**
-     * 创建分店，分店名称、地址、电话不能为空
+     * 创建分店
      * /api/branch/save
      */
     @Operation(summary = "创建分店")
@@ -50,12 +50,17 @@ public class BranchController {
     }
 
     /**
-     * 删除分店，需要指定分店编号
+     * 删除分店
      * /api/branch/delete/{branchId}
      */
     @Operation(summary = "删除分店")
     @DeleteMapping("/delete/{branchId}")
     public ResponseResult removeBranch(@PathVariable Integer branchId) throws Exception {
+
+        ResponseResult responseResult = roomFeignClient.removeRoomsByBranchId(branchId);
+
+        if(responseResult.getCode() != 1)
+            return ResponseResult.error("删除分店房间失败!");
 
         boolean result = branchService.removeById(branchId);
 

@@ -9,9 +9,21 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements RoomService {
+
+    @Override
+    public List<Integer> getRoomsIdByBranchId(Integer branchId) {
+
+        LambdaQueryWrapper<Room> wrapper = new LambdaQueryWrapper<>();
+
+        wrapper.eq(Room::getBranchId, branchId);
+
+        return this.list(wrapper).stream().map(Room::getRoomId).collect(Collectors.toList());
+
+    }
 
     @Override
     public List<Room> loadRoomsByBranchId(Integer branchId) {
