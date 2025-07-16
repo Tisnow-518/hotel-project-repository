@@ -72,7 +72,7 @@ public class BranchController {
     }
 
     /**
-     * 修改分店，需要指定分店编号
+     * 修改分店
      * /api/branch/update
      */
     @Operation(summary = "修改分店")
@@ -84,7 +84,7 @@ public class BranchController {
         if(result)
             return ResponseResult.success();
         else
-            return ResponseResult.error("修改失败!");
+            return ResponseResult.error("修改分店失败!");
 
     }
 

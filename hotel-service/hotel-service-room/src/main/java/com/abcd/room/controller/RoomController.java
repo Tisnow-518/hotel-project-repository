@@ -77,6 +77,23 @@ public class RoomController {
 
     }
 
+    /**
+     * 修改房间
+     * /api/room/update
+     */
+    @Operation(summary = "修改房间")
+    @PutMapping("/update")
+    public ResponseResult updateRoom(@RequestBody Room room) throws Exception {
+
+        boolean result = roomService.updateById(room);
+
+        if (result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("修改房间失败!");
+
+    }
+
 
     @Operation(summary = "加载房间分页信息")
     @GetMapping("list")  /// api/room/list?pageNo=
