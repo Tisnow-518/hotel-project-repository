@@ -5,6 +5,7 @@ import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.domain.User;
 import com.abcd.hotel.utils.JwtUserToken;
 import com.abcd.hotel.utils.ResponseResult;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/api/auth")  /// url前缀
+@RequestMapping("/auth")  /// url前缀
 public class AuthController {
 
     @Autowired
@@ -102,13 +103,12 @@ public class AuthController {
      */
     @Operation(summary = "查询用户列表")
     @GetMapping("/list")
-    public ResponseResult loadUsers() throws Exception {
-        List<User> userList = authService.list();
-
-        if(!userList.isEmpty())
-            return ResponseResult.success(userList);
+    public ResponseResult loadUsers(int pageNo) throws Exception {
+        Page<User> page = authService.loadPagedUser(pageNo, 10);
+        if(page!=null)
+            return ResponseResult.success(page);
         else
-            return ResponseResult.error("没有用户信息!");
+            return ResponseResult.error("加载用户分页信息失败!");
 
     }
 

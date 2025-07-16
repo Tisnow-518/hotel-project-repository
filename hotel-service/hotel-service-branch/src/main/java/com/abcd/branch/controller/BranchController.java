@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/api/branch")  /// url前缀
+@RequestMapping("/branch")  /// url前缀
 @Slf4j
 @Tag(name="分店控制器")
 public class BranchController {
