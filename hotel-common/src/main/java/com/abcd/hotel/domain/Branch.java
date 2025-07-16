@@ -6,10 +6,8 @@ import lombok.*;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@TableName("branch")
+@Data  /// 添加常见方法
+@TableName("branch")  /// 表名
 public class Branch extends ValueObject {
 
 

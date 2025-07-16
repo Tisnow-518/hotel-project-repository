@@ -2,14 +2,10 @@ package com.abcd.hotel.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@TableName("room")
+@Data  /// 添加常见方法
+@TableName("room")  /// 表名
 public class Room extends ValueObject {
 
     @Schema(description = "房间编号")

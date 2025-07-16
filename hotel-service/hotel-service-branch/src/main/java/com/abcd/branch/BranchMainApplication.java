@@ -8,8 +8,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {"com.abcd.branch", "com.abcd.hotel.config","com.abcd.hotel.utils"})  /// SpringBoot微服务
 @EnableDiscoveryClient /// 发现微服务
+@MapperScan("com.abcd.hotel.mapper")  /// Mapper扫描路径
 @EnableFeignClients  /// OpenFeign相关
-@MapperScan("com.abcd.hotel.mapper")
 public class BranchMainApplication {
 
     public static void main(String[] args) {

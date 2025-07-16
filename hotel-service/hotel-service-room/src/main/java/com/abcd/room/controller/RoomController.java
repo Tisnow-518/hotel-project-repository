@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/room")
+@RequestMapping("/room")  /// url前缀
 @Slf4j
 @Tag(name="房间控制器")
 public class RoomController {
@@ -26,6 +26,35 @@ public class RoomController {
     private RoomService roomService;
     @Autowired
     private BranchFeignClient branchFeignClient;
+
+    @Operation(summary = "加载房间分页信息")
+    @GetMapping("list")  /// api/room/list?pageNo=
+    public ResponseResult loadPagedList(int pageNo) throws Exception {
+
+        Page<Room> page = roomService.loadPagedRoom(pageNo, 10);
+        if(page!=null)
+            return ResponseResult.success(page);
+        else
+            return ResponseResult.error("加载房间分页信息失败!");
+
+    }
+
+    /**
+     * 根据房间编号获取房间信息
+     * /api/room/{roomId}
+     */
+    @Operation(summary = "根据房间编号获取房间信息")
+    @GetMapping("/{roomId}")
+    public ResponseResult getRoomById(@PathVariable Integer roomId) throws Exception {
+
+        Room room = roomService.getById(roomId);
+
+        if (room != null)
+            return ResponseResult.success(room);
+        else
+            return ResponseResult.error("获取房间信息失败!");
+
+    }
 
     @Operation(summary = "根据分店名称获取房间列表")
     @GetMapping("/branchName/{branchName}")
@@ -89,17 +118,7 @@ public class RoomController {
 
 
 
-    @Operation(summary = "加载房间分页信息")
-    @GetMapping("list")  /// api/room/list?pageNo=
-    public ResponseResult loadPagedList(int pageNo) throws Exception {
 
-        Page<Room> page = roomService.loadPagedRoom(pageNo, 10);
-        if(page!=null)
-            return ResponseResult.success(page);
-        else
-            return ResponseResult.error("加载房间分页信息失败!");
-
-    }
 
     /**
      * 根据分店编号加载房间列表

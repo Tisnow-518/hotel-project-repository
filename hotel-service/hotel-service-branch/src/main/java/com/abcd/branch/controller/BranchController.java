@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/branch")
+@RequestMapping("/branch")  /// url前缀
 @Slf4j
 @Tag(name="分店控制器")
 public class BranchController {
@@ -84,6 +84,27 @@ public class BranchController {
     }
 
     /**
+     * 根据分店编号获取分店信息
+     * /api/branch/{branchId}
+     */
+    @Operation(summary = "根据分店编号获取分店信息")
+    @GetMapping("/{branchId}")
+    public ResponseResult getBranchById(@PathVariable Integer branchId) throws Exception {
+
+        Branch branch = branchService.getById(branchId);
+
+        ResponseResult data = roomFeignClient.getRoomListByBranchId(branchId);
+        List<Room> roomList = (List<Room>) data.getData();
+        branch.setRoomList(roomList);
+
+        if (branch != null)
+            return ResponseResult.success(branch);
+        else
+            return ResponseResult.error("获取分店信息失败!");
+
+    }
+
+    /**
      * 获取分店编号，需要指定分店名
      * /api/branch/branchId/branchName/{branchName}
      */
@@ -110,31 +131,7 @@ public class BranchController {
             return ResponseResult.error("查询分店分页信息失败!");
     }
 
-    /**
-     * 根据分店编号查询分店信息
-     */
-    @Operation(summary = "根据分店编号查询分店信息")
-    @GetMapping("/{branchId}")
-    public ResponseResult getBranchById(@PathVariable Integer branchId) throws Exception {
 
-        log.info("开始根据分店编号获取分店信息...");
-
-        System.out.println("load branch, id = " + branchId);
-        Branch branch = branchService.getById(branchId);
-        //branch.setRoomList(this.loadRemoteRoomsByBranchIdWithLoadBalanceAnnotation(branchId));
-
-        ResponseResult data = roomFeignClient.getRoomListByBranchId(branchId);
-        List<Room> roomList = (List<Room>) data.getData();
-        branch.setRoomList(roomList);
-
-        log.info("通过OpenFeign获得数据，得到房间数量: " + roomList.size());
-
-        ResponseResult<Branch> result = ResponseResult.success(branch);
-        result.setMsg("分店信息加载完成!");
-
-        return result;
-
-    }
 
     /**
      * 根据分店编号加载房间列表，直接使用url
