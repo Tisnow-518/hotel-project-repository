@@ -6,12 +6,17 @@ import com.abcd.branch.service.BranchService;
 import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.utils.ResponseResult;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import com.abcd.branch.handler.FlowBlockExceptionHandler;
 
 import java.util.List;
 
@@ -86,9 +91,13 @@ public class BranchController {
      * 根据分店编号获取分店信息
      * /api/branch/{branchId}
      */
+    @SentinelResource(value="getBranchById",blockHandler = "getDefaultBranch",fallback="getFallBackBranch",exceptionsToIgnore = NullPointerException.class)
     @Operation(summary = "根据分店编号获取分店信息")
     @GetMapping("/{branchId}")
     public ResponseResult getBranchById(@PathVariable Integer branchId) throws Exception {
+
+        if(branchId>10000)
+            throw new NullPointerException("类别编号不能大于10000！");
 
         Branch branch = branchService.getById(branchId);
 
@@ -100,6 +109,29 @@ public class BranchController {
             return ResponseResult.success(branch);
         else
             return ResponseResult.error("获取分店信息失败!");
+    }
+    //被拦截时所运行的方法
+    public ResponseResult getDefaultBranch(@PathVariable Integer branchId,BlockException e) throws Exception{
+
+        Branch defaultBranch=new Branch();
+        defaultBranch.setBranchId(branchId);
+        defaultBranch.setBranchName("默认分店");
+
+        ResponseResult result=ResponseResult.success(defaultBranch);
+        result.setMsg("默认分店加载完成！"+e.getMessage());
+        return result;
+    }
+    //出现异常是所运行的方法
+    public ResponseResult getFallBackBranch(@PathVariable Integer branchId, Throwable e) throws Exception{
+
+        Branch defaultBranch=new Branch();
+        defaultBranch.setBranchId(branchId);
+        defaultBranch.setBranchName("默认分店");
+
+        ResponseResult result=ResponseResult.success(defaultBranch);
+        result.setMsg("分店加载失败，返回默认值！"+e.getMessage());
+        return result;
+
 
     }
 
@@ -107,6 +139,7 @@ public class BranchController {
      * 获取分店编号，需要指定分店名
      * /api/branch/branchId/branchName/{branchName}
      */
+    @SentinelResource(value="getBranchIdByBranchName")
     @Operation(summary = "根据分店名获取分店编号")
     @GetMapping("/branchId/branchName/{branchName}")
     public Integer getBranchIdByBranchName(@PathVariable String branchName) throws Exception {
