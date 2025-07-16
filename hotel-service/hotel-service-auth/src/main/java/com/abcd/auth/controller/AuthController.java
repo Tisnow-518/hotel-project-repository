@@ -40,7 +40,7 @@ public class AuthController {
         String token = jwtUserToken.getToken(user);
         HashMap<String, Object> data = new HashMap<>();
         data.put("token", token);
-        data.put("user",user);
+        data.put("user", user1);
         return ResponseResult.success(data);
     }
 
