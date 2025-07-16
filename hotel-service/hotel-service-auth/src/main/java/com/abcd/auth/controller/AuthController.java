@@ -3,10 +3,14 @@ package com.abcd.auth.controller;
 import com.abcd.auth.service.AuthService;
 import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.domain.User;
+import com.abcd.hotel.utils.JwtUserToken;
 import com.abcd.hotel.utils.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController  /// 控制器，返回结果处理为json
 @RequestMapping("/user")  /// url前缀
@@ -14,6 +18,33 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    @Autowired
+    private JwtUserToken jwtUserToken;
+
+    /**
+     * 登录
+     * /api/user/login
+     */
+    @Operation(summary = "登录")
+    @PostMapping("/login")
+    public ResponseResult login(@RequestBody User user) {
+
+        User user1 = authService.getUserByUserName(user.getUserName());
+
+        if (user1 == null)
+            return ResponseResult.error("用户名错误!");
+
+        if (!user1.getUserPassword().equals(user.getUserPassword()))
+            return ResponseResult.error("密码错误");
+
+        String token = jwtUserToken.getToken(user);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("token", token);
+        data.put("user", user1);
+        return ResponseResult.success(data);
+    }
+
+
 
     /**
      * 创建用户
