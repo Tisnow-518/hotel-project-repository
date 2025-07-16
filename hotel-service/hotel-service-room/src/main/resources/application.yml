@@ -5,6 +5,10 @@ spring:
   cloud:
     nacos:
       server-addr: 127.0.0.1:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+      eager: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/hoteldb?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai

@@ -4,6 +4,7 @@ import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.utils.ResponseResult;
 import com.abcd.room.Feign.BranchFeignClient;
 import com.abcd.room.service.RoomService;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +28,7 @@ public class RoomController {
     @Autowired
     private BranchFeignClient branchFeignClient;
 
+    @SentinelResource(value="loadPagedList")
     @Operation(summary = "加载房间分页信息")
     @GetMapping("list")  /// api/room/list?pageNo=
     public ResponseResult loadPagedList(int pageNo) throws Exception {
@@ -43,6 +45,7 @@ public class RoomController {
      * 根据房间编号获取房间信息
      * /api/room/{roomId}
      */
+    @SentinelResource(value="getRoomById")
     @Operation(summary = "根据房间编号获取房间信息")
     @GetMapping("/{roomId}")
     public ResponseResult getRoomById(@PathVariable Integer roomId) throws Exception {
@@ -56,6 +59,7 @@ public class RoomController {
 
     }
 
+    @SentinelResource(value="loadRoomsByBranchName")
     @Operation(summary = "根据分店名称获取房间列表")
     @GetMapping("/branchName/{branchName}")
     public ResponseResult <List<Room>> loadRoomsByBranchName(@PathVariable String branchName) throws Exception {
@@ -80,6 +84,7 @@ public class RoomController {
         return ResponseResult.error("加载房间列表失败!");
     }
 
+    @SentinelResource(value="loadRoomsByRoomType")
     @Operation(summary = "根据房间类型获取房间列表")
     @GetMapping("/roomType/{roomType}")
     public ResponseResult <List<Room>> loadRoomsByRoomType(@PathVariable String roomType) throws Exception {
@@ -98,6 +103,7 @@ public class RoomController {
         return ResponseResult.error("加载房间列表失败!");
     }
 
+    @SentinelResource(value="loadRoomsByRoomStatus")
     @Operation(summary = "根据房间状态获取房间列表")
     @GetMapping("/roomStatus/{roomStatus}")
     public ResponseResult <List<Room>> loadRoomsByRoomStatus(@PathVariable String roomStatus) throws Exception {
@@ -123,6 +129,7 @@ public class RoomController {
     /**
      * 根据分店编号加载房间列表
      */
+    @SentinelResource(value="loadRoomsByBranchId")
     @Operation(summary = "根据分店编号加载房间列表")
     @GetMapping("/branchId/{branchId}")
     public ResponseResult <List<Room>> loadRoomsByBranchId(@PathVariable Integer branchId) throws Exception {

@@ -5,6 +5,7 @@ import com.abcd.hotel.domain.Branch;
 import com.abcd.branch.service.BranchService;
 import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.utils.ResponseResult;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,6 +37,7 @@ public class BranchController {
      * 创建分店，分店名称、地址、电话不能为空
      * /api/branch/save
      */
+
     @Operation(summary = "创建分店")
     @PostMapping("/save")
     public ResponseResult createBranch(@RequestBody Branch branch) throws Exception {
@@ -87,6 +89,7 @@ public class BranchController {
      * 根据分店编号获取分店信息
      * /api/branch/{branchId}
      */
+    @SentinelResource(value="getBranchById")
     @Operation(summary = "根据分店编号获取分店信息")
     @GetMapping("/{branchId}")
     public ResponseResult getBranchById(@PathVariable Integer branchId) throws Exception {
@@ -108,6 +111,7 @@ public class BranchController {
      * 获取分店编号，需要指定分店名
      * /api/branch/branchId/branchName/{branchName}
      */
+    @SentinelResource(value="getBranchIdByBranchName")
     @Operation(summary = "根据分店名获取分店编号")
     @GetMapping("/branchId/branchName/{branchName}")
     public Integer getBranchIdByBranchName(@PathVariable String branchName) throws Exception {
@@ -119,6 +123,8 @@ public class BranchController {
     }
 
 
+
+    @SentinelResource(value="loadPagedList")
     @Operation(summary = "分店分页")
     @GetMapping("list")  /// api/branch/list?pageNo=
     public ResponseResult loadPagedList(int pageNo) throws Exception{
