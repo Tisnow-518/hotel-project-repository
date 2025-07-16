@@ -82,7 +82,7 @@ create table room (
     delimiter ;
 
 
--- 插入示例房间数据
+-- 插入房间数据
 
 insert into room (branch_id ,room_no, room_type)
 values
@@ -97,4 +97,26 @@ values
     (3, '101', '普单人间'),
     (3, '102', '普双人间'),
     (3, '201', '商务套房');
+
+
+-- 创建用户表
+
+create table user (
+    user_id         int primary key auto_increment,
+    user_name       varchar(50) not null,
+    user_password   varchar(100) not null,
+    user_role       varchar(20) not null default 'user',
+    create_time     datetime not null default current_timestamp,
+    update_time     datetime not null default current_timestamp on update current_timestamp,
+    created_by      char(6) not null default '000001',
+    updated_by      char(6) not null default '000001',
+    is_deleted      int not null default 0
+);
+
+
+-- 插入用户数据
+insert into user (user_name, user_password, user_role)
+values
+    ('admin', 'adc123', 'admin'),
+    ('manager', 'abc123', 'manager');
 
