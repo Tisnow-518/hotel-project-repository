@@ -5,6 +5,7 @@ import com.abcd.hotel.domain.Branch;
 import com.abcd.branch.service.BranchService;
 import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.utils.ResponseResult;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/branch")  /// url前缀
+@RequestMapping("/api/branch")  /// url前缀
 @Slf4j
 @Tag(name="分店控制器")
 public class BranchController {
@@ -114,6 +115,7 @@ public class BranchController {
 
     }
 
+    @SentinelResource(value = "loadBranchList")
     @Operation(summary = "分店分页")
     @GetMapping("list")  /// api/branch/list?pageNo=
     public ResponseResult loadPagedList(int pageNo) throws Exception{

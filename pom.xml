@@ -16,7 +16,8 @@
 	<modules>
 		<module>hotel-common</module>
 		<module>hotel-service</module>
-	</modules>
+        <module>gateway</module>
+    </modules>
 
 	<packaging>pom</packaging>
 
