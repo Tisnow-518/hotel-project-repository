@@ -18,6 +18,13 @@
     </properties>
 
     <dependencies>
+        <!-- hotel-common 依赖 -->
+        <dependency>
+            <groupId>com.abcd</groupId>
+            <artifactId>hotel-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!-- Spring Web 依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

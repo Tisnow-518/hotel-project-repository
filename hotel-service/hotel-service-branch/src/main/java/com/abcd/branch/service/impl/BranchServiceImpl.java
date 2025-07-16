@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service  /// 服务
 public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> implements BranchService {
 
     @Override

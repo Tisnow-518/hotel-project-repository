@@ -9,15 +9,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/room")
+@RestController  /// 控制器，返回结果处理为json
+@RequestMapping("/api/room")  /// url前缀
 @Slf4j
 @Tag(name="房间控制器")
 public class RoomController {
@@ -26,6 +23,106 @@ public class RoomController {
     private RoomService roomService;
     @Autowired
     private BranchFeignClient branchFeignClient;
+
+    /**
+     * 创建房间
+     * /api/room/save
+     */
+    @Operation(summary = "创建房间")
+    @PostMapping("/save")
+    public ResponseResult createRoom(@RequestBody Room room) throws Exception {
+
+        boolean result = roomService.save(room);
+
+        if (result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("创建房间失败!");
+
+    }
+
+    /**
+     * 删除房间
+     * /api/room/delete/{roomId}
+     */
+    @Operation(summary = "删除房间")
+    @DeleteMapping("/delete/{roomId}")
+    public ResponseResult removeRoom(@PathVariable Integer roomId) throws Exception {
+
+        boolean result = roomService.removeById(roomId);
+
+        if (result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("删除房间失败!");
+
+    }
+
+    /**
+     * 根据分店编号删除房间
+     * /api/room/delete/branchId/{branchId}
+     */
+    @Operation(summary = "根据分店编号删除房间")
+    @DeleteMapping("/delete/branchId/{branchId}")
+    public ResponseResult removeRoomByBranchId(@PathVariable Integer branchId) throws Exception {
+
+        List<Integer> roomsId = roomService.getRoomsIdByBranchId(branchId);
+
+        boolean result = roomService.removeByIds(roomsId);
+
+        if (result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("删除房间失败!");
+
+    }
+
+    /**
+     * 修改房间
+     * /api/room/update
+     */
+    @Operation(summary = "修改房间")
+    @PutMapping("/update")
+    public ResponseResult updateRoom(@RequestBody Room room) throws Exception {
+
+        boolean result = roomService.updateById(room);
+
+        if (result)
+            return ResponseResult.success();
+        else
+            return ResponseResult.error("修改房间失败!");
+
+    }
+
+
+    @Operation(summary = "加载房间分页信息")
+    @GetMapping("list")  /// api/room/list?pageNo=
+    public ResponseResult loadPagedList(int pageNo) throws Exception {
+
+        Page<Room> page = roomService.loadPagedRoom(pageNo, 10);
+        if(page!=null)
+            return ResponseResult.success(page);
+        else
+            return ResponseResult.error("加载房间分页信息失败!");
+
+    }
+
+    /**
+     * 根据房间编号获取房间信息
+     * /api/room/{roomId}
+     */
+    @Operation(summary = "根据房间编号获取房间信息")
+    @GetMapping("/{roomId}")
+    public ResponseResult getRoomById(@PathVariable Integer roomId) throws Exception {
+
+        Room room = roomService.getById(roomId);
+
+        if (room != null)
+            return ResponseResult.success(room);
+        else
+            return ResponseResult.error("获取房间信息失败!");
+
+    }
 
     @Operation(summary = "根据分店名称获取房间列表")
     @GetMapping("/branchName/{branchName}")
@@ -89,17 +186,7 @@ public class RoomController {
 
 
 
-    @Operation(summary = "加载房间分页信息")
-    @GetMapping("list")  /// api/room/list?pageNo=
-    public ResponseResult loadPagedList(int pageNo) throws Exception {
 
-        Page<Room> page = roomService.loadPagedRoom(pageNo, 10);
-        if(page!=null)
-            return ResponseResult.success(page);
-        else
-            return ResponseResult.error("加载房间分页信息失败!");
-
-    }
 
     /**
      * 根据分店编号加载房间列表

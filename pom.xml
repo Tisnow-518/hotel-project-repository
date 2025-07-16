@@ -16,7 +16,8 @@
 	<modules>
 		<module>hotel-common</module>
 		<module>hotel-service</module>
-	</modules>
+        <module>gateway</module>
+    </modules>
 
 	<packaging>pom</packaging>
 
@@ -44,7 +45,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!--mybatisPlus依赖-->
+			<!-- Jwt 依赖 -->
+			<dependency>
+				<groupId>com.auth0</groupId>
+				<artifactId>java-jwt</artifactId>
+				<version>3.10.3</version>
+			</dependency>
+			<!-- Mybatis Plus 依赖 -->
 			<dependency>
 				<groupId>com.baomidou</groupId>
 				<artifactId>mybatis-plus-spring-boot3-starter</artifactId>

@@ -9,6 +9,11 @@ import java.util.List;
 public interface RoomService extends IService<Room> {
 
     /**
+     * 根据分店编号获取房间编号
+     */
+    List<Integer> getRoomsIdByBranchId(Integer branchId);
+
+    /**
      * 根据分店编号加载房间列表，并按房间编号升序排序
      */
     List<Room> loadRoomsByBranchId(Integer branchId);
