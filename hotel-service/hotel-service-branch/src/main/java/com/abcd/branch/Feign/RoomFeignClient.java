@@ -13,10 +13,10 @@ public interface RoomFeignClient {
      * 根据分店编号删除房间
      * /api/room/delete/branchId/{branchId}
      */
-    @DeleteMapping("/api/room/delete/branchId/{branchId}")
+    @DeleteMapping("/room/delete/branchId/{branchId}")
     ResponseResult removeRoomsByBranchId(@PathVariable Integer branchId);
 
-    @GetMapping("/api/room/branchId/{branchId}")
+    @GetMapping("/room/branchId/{branchId}")
     ResponseResult getRoomListByBranchId(@PathVariable Integer branchId);
 
 }
