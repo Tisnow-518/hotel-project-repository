@@ -24,6 +24,7 @@
     </properties>
 
     <dependencies>
+        <!-- Nacos 依赖 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>

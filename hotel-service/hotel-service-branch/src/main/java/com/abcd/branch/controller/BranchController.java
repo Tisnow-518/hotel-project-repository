@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@RestController
+@RestController  /// 控制器，返回结果处理为json
 @RequestMapping("/branch")
 @Slf4j
 @Tag(name="分店控制器")

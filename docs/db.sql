@@ -16,7 +16,7 @@ grant all on hoteldb.* to hoteladmin;
 
 create table branch (
     branch_id       int primary key auto_increment,
-    branch_name     varchar(100) not null,
+    branch_name     varchar(100) not null unique,
     branch_address  varchar(255) not null,
     branch_phone    varchar(30) not null,
     room_count      int not null default 0,
@@ -103,7 +103,7 @@ values
 
 create table user (
     user_id         int primary key auto_increment,
-    user_name       varchar(50) not null,
+    user_name       varchar(50) not null unique,
     user_password   varchar(100) not null,
     user_role       varchar(20) not null default 'user',
     create_time     datetime not null default current_timestamp,

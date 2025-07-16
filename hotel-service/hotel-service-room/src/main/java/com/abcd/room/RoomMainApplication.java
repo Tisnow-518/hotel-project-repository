@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
+@SpringBootApplication(scanBasePackages = {"com.abcd.room", "com.abcd.hotel.config","com.abcd.hotel.utils"})  /// SpringBoot微服务
+@EnableDiscoveryClient  /// 发现微服务
 @EnableFeignClients
-@EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.abcd.room", "com.abcd.hotel.config","com.abcd.hotel.utils"})
 @MapperScan("com.abcd.hotel.mapper")
 public class RoomMainApplication {
 
