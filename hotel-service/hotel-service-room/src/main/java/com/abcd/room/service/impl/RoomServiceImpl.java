@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements RoomService {
 
+    @Transactional
     @Override
     public List<Integer> getRoomsIdByBranchId(Integer branchId) {
 
@@ -25,6 +27,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements Ro
 
     }
 
+    @Transactional
     @Override
     public List<Room> loadRoomsByBranchId(Integer branchId) {
 
@@ -37,6 +40,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements Ro
 
     }
 
+    @Transactional
     @Override
     public List<Room> loadRoomsByRoomType(String roomType) {
 
@@ -49,6 +53,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements Ro
 
     }
 
+    @Transactional
     @Override
     public List<Room> loadRoomsByRoomStatus(String roomStatus) {
 
@@ -61,6 +66,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements Ro
 
     }
 
+    @Transactional
     @Override
     public Page<Room> loadPagedRoom(int pageNo, int pageSize) {
 
