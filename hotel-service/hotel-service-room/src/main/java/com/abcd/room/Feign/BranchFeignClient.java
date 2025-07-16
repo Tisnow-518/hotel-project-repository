@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(value = "hotel-service-branch")
 public interface BranchFeignClient {
 
-    @GetMapping("api/branch/branchId/branchName/{branchName}")
+    @GetMapping("/branch/branchId/branchName/{branchName}")
     Integer getBranchIdByBranchName(@PathVariable String branchName);
 
 }

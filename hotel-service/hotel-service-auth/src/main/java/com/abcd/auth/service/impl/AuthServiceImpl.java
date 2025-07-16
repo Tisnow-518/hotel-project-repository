@@ -8,11 +8,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service  /// 服务
 public class AuthServiceImpl extends ServiceImpl<UserMapper, User> implements AuthService {
 
 
+    @Transactional
     @Override
     public User getUserByUserName(String userName) {
 
@@ -24,6 +26,7 @@ public class AuthServiceImpl extends ServiceImpl<UserMapper, User> implements Au
         return getOne(wrapper);
     }
 
+    @Transactional
     @Override
     public Page<User> loadPagedUser(int pageNo, int pageSize) {
         Page<User> page = new Page<>(pageNo, pageSize);

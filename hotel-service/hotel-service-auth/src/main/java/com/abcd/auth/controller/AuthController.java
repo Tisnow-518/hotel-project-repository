@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/api/auth")  /// url前缀
+@RequestMapping("/auth")  /// url前缀
 public class AuthController {
 
     @Autowired
