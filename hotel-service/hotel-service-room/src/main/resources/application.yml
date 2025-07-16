@@ -14,6 +14,10 @@ spring:
     url: jdbc:mysql://localhost:3306/hoteldb?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
     username: hoteladmin
     password: abc123
+  servlet:
+    multipart:
+      max-file-size: 5MB      #每次上传的单个文件大小的限制
+      max-request-size: 20MB  #每次请求上传的文件大小总和的限制
 
 # mybatis-plus配置文件
 mybatis-plus:
