@@ -64,12 +64,14 @@ public class BranchController {
     @DeleteMapping("/delete/{branchId}")
     public ResponseResult removeBranch(@PathVariable Integer branchId) throws Exception {
 
-        ResponseResult responseResult = roomFeignClient.removeRoomsByBranchId(branchId);
+        roomFeignClient.removeRoomsByBranchId(branchId);
 
-        if(responseResult.getCode() != 1)
-            return ResponseResult.error("删除分店房间失败!");
+        boolean result = branchService.clearRoomCount(branchId);
 
-        boolean result = branchService.removeById(branchId);
+        if(!result)
+            return ResponseResult.error("清零房间数失败!");
+
+        result = branchService.removeById(branchId);
 
         if(result)
             return ResponseResult.success();

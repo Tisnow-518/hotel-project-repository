@@ -4,6 +4,7 @@ import com.abcd.branch.service.BranchService;
 import com.abcd.hotel.domain.Branch;
 import com.abcd.hotel.mapper.BranchMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -32,6 +33,16 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
         Page<Branch> page = new Page<>(pageNo, pageSize);
         return this.page(page);
 
+    }
+
+    @Override
+    public boolean clearRoomCount(Integer branchId) {
+
+        UpdateWrapper<Branch> wrapper = new UpdateWrapper<>();
+        wrapper.setSql("room_count = 0")
+                .eq("branch_id", branchId);
+
+        return this.update(wrapper);
     }
 
 }
