@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/room")  /// url前缀
+@RequestMapping("/api/room")  /// url前缀
 @Slf4j
 @Tag(name="房间控制器")
 public class RoomController {

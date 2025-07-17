@@ -6,17 +6,13 @@ spring:
           uri: lb://hotel-service-auth
           predicates:
             - Path=/api/auth/**
-          filters:
-            - RewritePath=/api/?(?<segment>.*), /$\{segment}
         - id: branch-route
           uri: lb://hotel-service-branch
           predicates:
             - Path=/api/branch/**
-          filters:
-            - RewritePath=/api/?(?<segment>.*), /$\{segment}
         - id: room-route
           uri: lb://hotel-service-room
           predicates:
             - Path=/api/room/**
-          filters:
-            - RewritePath=/api/?(?<segment>.*), /$\{segment}
+#         filters:
+#           - RewritePath=/red/?(?<segment>.*), /$\{segment}

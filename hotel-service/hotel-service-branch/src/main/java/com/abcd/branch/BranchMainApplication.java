@@ -7,7 +7,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication(scanBasePackages = {"com.abcd.branch", "com.abcd.hotel.config","com.abcd.hotel.utils"})  /// SpringBoot微服务
+@SpringBootApplication(scanBasePackages = {"com.abcd.branch", "com.abcd.hotel.config","com.abcd.hotel.utils","com.abcd.hotel.controller"})  /// SpringBoot微服务
 @EnableDiscoveryClient /// 发现微服务
 @EnableTransactionManagement/// 启用事务管理
 @MapperScan("com.abcd.hotel.mapper")  /// Mapper扫描路径
