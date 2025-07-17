@@ -3,18 +3,23 @@ package com.abcd.room.controller;
 import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.utils.ResponseResult;
 import com.abcd.room.Feign.BranchFeignClient;
+import com.abcd.room.Feign.MoneyExchangeFeignClient;
 import com.abcd.room.service.RoomService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController  /// 控制器，返回结果处理为json
 @RequestMapping("/api/room")  /// url前缀
+@RefreshScope  /// 配置的动态刷新
 @Slf4j
 @Tag(name="房间控制器")
 public class RoomController {
@@ -23,6 +28,11 @@ public class RoomController {
     private RoomService roomService;
     @Autowired
     private BranchFeignClient branchFeignClient;
+    @Autowired
+    private MoneyExchangeFeignClient moneyExchangeFeignClient;
+
+    @Value("${room.price}")
+    private String price;
 
     /**
      * 创建房间
@@ -117,8 +127,18 @@ public class RoomController {
 
         Room room = roomService.getById(roomId);
 
+        ResponseResult result = ResponseResult.success(room);
+
+        ResponseResult exchangeResult = moneyExchangeFeignClient.getExchange("a1376bdea11b34f555f65811934663e8",
+                "CNY", "USD", price);
+
+        Map<String,Object> data = (Map<String, Object>) exchangeResult.getData();
+        String priceUSD = (String) data.get("money");
+
+        result.setMsg("获取房间信息成功，房间价格(CNY)：" + price + "，房间价格(USD)：" + priceUSD);
+
         if (room != null)
-            return ResponseResult.success(room);
+            return result;
         else
             return ResponseResult.error("获取房间信息失败!");
 

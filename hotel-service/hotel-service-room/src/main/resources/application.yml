@@ -5,13 +5,17 @@ spring:
   cloud:
     nacos:
       server-addr: 127.0.0.1:8848
-      config:
-        import-check:
-          enabled: false
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 20000
     sentinel:
       eager: true
       transport:
         dashboard: localhost:8080
+  config:
+    import: nacos:hotel-service-room.properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/hoteldb?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
