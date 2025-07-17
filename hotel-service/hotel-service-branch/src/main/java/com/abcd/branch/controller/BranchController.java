@@ -98,6 +98,35 @@ public class BranchController {
     }
 
     /**
+     * 将房间数减1
+     * /api/branch/decRoomCount/{branchId}
+     */
+    @Operation(summary = "房间数减1")
+    @GetMapping("/decRoomCount/{branchId}")
+    public boolean decRoomCount(@PathVariable Integer branchId) throws Exception {
+
+        return branchService.decRoomCount(branchId);
+
+    }
+
+    /**
+     * 加载分店分页信息
+     * /api/branch/list?pageNo=
+     */
+    @SentinelResource(value = "loadBranchList")
+    @Operation(summary = "加载分店分页信息")
+    @GetMapping("list")  /// api/branch/list?pageNo=
+    public ResponseResult loadPagedList(int pageNo) throws Exception{
+
+        Page<Branch> page = branchService.loadPagedBranch(pageNo, 10);
+
+        if(page!=null)
+            return ResponseResult.success(page);
+        else
+            return ResponseResult.error("加载分店分页信息失败!");
+    }
+
+    /**
      * 根据分店编号获取分店信息
      * /api/branch/{branchId}
      */
@@ -109,6 +138,7 @@ public class BranchController {
         if(branchId>10000)
             throw new NullPointerException("类别编号不能大于10000！");
 
+//        Nacos 配置管理相关
 //        log.info("timeout: " + workProperties.getTimeout());
 //        log.info("location: " + workProperties.getLocation());
 //        log.info("typeMode: " + workProperties.getTypeMode());
@@ -126,6 +156,24 @@ public class BranchController {
         }
         else
             return ResponseResult.error("获取分店信息失败!");
+    }
+
+    /**
+     * 根据分店名获取分店编号
+     * /api/branch/branchId/branchName/{branchName}
+     */
+    @SentinelResource(value="getBranchIdByBranchName")
+    @Operation(summary = "根据分店名获取分店编号")
+    @GetMapping("/branchId/branchName/{branchName}")
+    public Integer getBranchIdByBranchName(@PathVariable String branchName) throws Exception {
+
+//        超时处理相关
+//        log.info("开始加载房间数据...");
+//        Thread.sleep(10000);
+//        log.info("......ok!");
+
+        return branchService.getBranchIdByBranchName(branchName);
+
     }
 
     //被拦截时所运行的方法
@@ -152,36 +200,6 @@ public class BranchController {
         return result;
 
 
-    }
-
-    /**
-     * 获取分店编号，需要指定分店名
-     * /api/branch/branchId/branchName/{branchName}
-     */
-    @SentinelResource(value="getBranchIdByBranchName")
-    @Operation(summary = "根据分店名获取分店编号")
-    @GetMapping("/branchId/branchName/{branchName}")
-    public Integer getBranchIdByBranchName(@PathVariable String branchName) throws Exception {
-
-//        log.info("开始加载房间数据...");
-//        Thread.sleep(10000);
-//        log.info("......ok!");
-
-        return branchService.getBranchIdByBranchName(branchName);
-
-    }
-
-    @SentinelResource(value = "loadBranchList")
-    @Operation(summary = "分店分页")
-    @GetMapping("list")  /// api/branch/list?pageNo=
-    public ResponseResult loadPagedList(int pageNo) throws Exception{
-
-        Page<Branch> page = branchService.loadPagedBranch(pageNo, 10);
-
-        if(page!=null)
-            return ResponseResult.success(page);
-        else
-            return ResponseResult.error("查询分店分页信息失败!");
     }
 
 }

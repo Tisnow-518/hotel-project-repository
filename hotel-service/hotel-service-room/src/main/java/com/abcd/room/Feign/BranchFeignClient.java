@@ -10,4 +10,7 @@ public interface BranchFeignClient {
     @GetMapping("/api/branch/branchId/branchName/{branchName}")
     Integer getBranchIdByBranchName(@PathVariable String branchName);
 
+    @GetMapping("/api/branch/decRoomCount/{branchId}")
+    boolean decRoomCount(@PathVariable Integer branchId);
+
 }

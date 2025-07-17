@@ -16,4 +16,9 @@ public interface BranchService extends IService<Branch> {
      */
     boolean clearRoomCount(Integer branchId);
 
+    /**
+     * 将房间数减1
+     */
+    boolean decRoomCount(Integer branchId);
+
 }

@@ -43,6 +43,18 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
                 .eq("branch_id", branchId);
 
         return this.update(wrapper);
+
+    }
+
+    @Override
+    public boolean decRoomCount(Integer branchId) {
+
+        UpdateWrapper<Branch> wrapper = new UpdateWrapper<>();
+        wrapper.setSql("room_count = room_count - 1")
+                .eq("branch_id", branchId);
+
+        return this.update(wrapper);
+
     }
 
 }

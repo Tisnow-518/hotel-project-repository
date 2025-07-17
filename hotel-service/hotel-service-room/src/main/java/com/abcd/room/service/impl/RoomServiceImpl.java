@@ -27,6 +27,17 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements Ro
 
     }
 
+    @Override
+    public Integer getBranchIdByRoomId(Integer roomId) {
+
+        LambdaQueryWrapper<Room> wrapper = new LambdaQueryWrapper<>();
+
+        wrapper.eq(Room::getRoomId, roomId);
+
+        return this.list(wrapper).stream().map(Room::getBranchId).toList().get(0);
+
+    }
+
     @Transactional
     @Override
     public List<Room> loadRoomsByBranchId(Integer branchId) {

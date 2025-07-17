@@ -60,7 +60,14 @@ public class RoomController {
     @DeleteMapping("/delete/{roomId}")
     public ResponseResult removeRoom(@PathVariable Integer roomId) throws Exception {
 
-        boolean result = roomService.removeById(roomId);
+        Integer branchId = roomService.getBranchIdByRoomId(roomId);
+
+        boolean result = branchFeignClient.decRoomCount(branchId);
+
+        if(!result)
+            return ResponseResult.error("修改房间数失败!");
+
+        result = roomService.removeById(roomId);
 
         if (result)
             return ResponseResult.success();
@@ -70,6 +77,7 @@ public class RoomController {
     }
 
     /**
+     * 请勿直接使用
      * 根据分店编号删除房间
      * /api/room/delete/branchId/{branchId}
      */
