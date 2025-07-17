@@ -1,8 +1,11 @@
 package com.abcd.branch.config;
 
+import com.abcd.branch.interceptor.IDInterceptor;
 import com.alibaba.cloud.nacos.NacosConfigManager;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
+import feign.RequestInterceptor;
+import feign.Retryer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -54,6 +57,18 @@ public class ServiceConfig {
 
         };
 
+    }
+
+    // OpenFeign会自动到容器中查找用户是否配置了重试器(retryer)，如果有，则立即使用
+    @Bean
+    Retryer feignRetryer(){
+        return new Retryer.Default();
+    }
+
+    // 查找拦截器
+    @Bean
+    RequestInterceptor getRequestInterceptor(){
+        return new IDInterceptor();
     }
 
 }

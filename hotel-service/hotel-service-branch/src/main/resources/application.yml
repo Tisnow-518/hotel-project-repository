@@ -9,6 +9,14 @@ spring:
       eager: true
       transport:
         dashboard: localhost:8080
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 3000
+            read-timeout: 5000
+            logger-level: full
+            request-interceptors: com.abcd.branch.interceptor.IDInterceptor
   config:
     import: nacos:hotel-service-branch.properties, nacos:work.properties
   datasource:
@@ -38,3 +46,4 @@ logging:
 
 server:
   port: 4000
+

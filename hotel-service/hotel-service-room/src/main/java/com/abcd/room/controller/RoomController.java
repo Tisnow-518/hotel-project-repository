@@ -8,6 +8,7 @@ import com.abcd.room.service.RoomService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -135,7 +136,7 @@ public class RoomController {
         Map<String,Object> data = (Map<String, Object>) exchangeResult.getData();
         String priceUSD = (String) data.get("money");
 
-        result.setMsg("获取房间信息成功，房间价格(CNY)：" + price + "，房间价格(USD)：" + priceUSD);
+        result.setMsg("获取房间信息成功，房费(CNY)：" + price + "，房费(USD)：" + priceUSD);
 
         if (room != null)
             return result;
@@ -213,9 +214,13 @@ public class RoomController {
      */
     @Operation(summary = "根据分店编号加载房间列表")
     @GetMapping("/branchId/{branchId}")
-    public ResponseResult <List<Room>> loadRoomsByBranchId(@PathVariable Integer branchId) throws Exception {
+    public ResponseResult <List<Room>> loadRoomsByBranchId(@PathVariable Integer branchId,HttpServletRequest request) throws Exception {
 
         List<Room> rooms = roomService.loadRoomsByBranchId(branchId);
+
+//        log.info("开始加载房间数据..."+request.getHeader("userid"));
+//        Thread.sleep(1000);
+//        log.info("......ok!");
 
         if(rooms==null) {
             log.info("加载房间信息失败!");

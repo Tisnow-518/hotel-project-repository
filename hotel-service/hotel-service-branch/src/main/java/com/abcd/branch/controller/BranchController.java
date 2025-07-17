@@ -11,6 +11,7 @@ import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,9 +107,9 @@ public class BranchController {
         if(branchId>10000)
             throw new NullPointerException("类别编号不能大于10000！");
 
-        log.info("timeout: " + workProperties.getTimeout());
-        log.info("location: " + workProperties.getLocation());
-        log.info("typeMode: " + workProperties.getTypeMode());
+//        log.info("timeout: " + workProperties.getTimeout());
+//        log.info("location: " + workProperties.getLocation());
+//        log.info("typeMode: " + workProperties.getTypeMode());
 
         Branch branch = branchService.getById(branchId);
 
@@ -159,6 +160,10 @@ public class BranchController {
     @Operation(summary = "根据分店名获取分店编号")
     @GetMapping("/branchId/branchName/{branchName}")
     public Integer getBranchIdByBranchName(@PathVariable String branchName) throws Exception {
+
+//        log.info("开始加载房间数据...");
+//        Thread.sleep(10000);
+//        log.info("......ok!");
 
         return branchService.getBranchIdByBranchName(branchName);
 

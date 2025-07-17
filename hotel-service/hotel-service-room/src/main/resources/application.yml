@@ -9,7 +9,9 @@ spring:
       client:
         config:
           default:
-            connect-timeout: 20000
+            connect-timeout: 3000
+            read-timeout: 5000
+            logger-level: full
     sentinel:
       eager: true
       transport:
