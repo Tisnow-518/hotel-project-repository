@@ -1,8 +1,9 @@
 package com.abcd.branch.controller;
 
 import com.abcd.branch.Feign.RoomFeignClient;
-import com.abcd.hotel.domain.Branch;
+import com.abcd.branch.properties.WorkProperties;
 import com.abcd.branch.service.BranchService;
+import com.abcd.hotel.domain.Branch;
 import com.abcd.hotel.domain.Room;
 import com.abcd.hotel.utils.ResponseResult;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
@@ -12,16 +13,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import com.abcd.branch.handler.FlowBlockExceptionHandler;
 
 import java.util.List;
 
-@RestController  /// 控制器，返回结果处理为json
-@RequestMapping("/api/branch")  /// url前缀
+@RestController                           /// 控制器，返回结果处理为json
+@RequestMapping("/api/branch")         /// url前缀
+@RefreshScope                             /// 配置的动态刷新
 @Slf4j
 @Tag(name="分店控制器")
 public class BranchController {
@@ -30,6 +30,13 @@ public class BranchController {
     private BranchService branchService;
     @Autowired
     private RoomFeignClient roomFeignClient;
+    @Autowired
+    private WorkProperties workProperties;
+
+    @Value("${branch.rank}")            /// Nacos 配置
+    private Integer rank;
+    @Value("${branch.capacity}")        /// Nacos 配置
+    private Integer capacity;
 
     /**
      * 创建分店
@@ -99,17 +106,25 @@ public class BranchController {
         if(branchId>10000)
             throw new NullPointerException("类别编号不能大于10000！");
 
+        log.info("timeout: " + workProperties.getTimeout());
+        log.info("location: " + workProperties.getLocation());
+        log.info("typeMode: " + workProperties.getTypeMode());
+
         Branch branch = branchService.getById(branchId);
 
         ResponseResult data = roomFeignClient.getRoomListByBranchId(branchId);
         List<Room> roomList = (List<Room>) data.getData();
         branch.setRoomList(roomList);
 
-        if (branch != null)
-            return ResponseResult.success(branch);
+        if (branch != null){
+            ResponseResult result = ResponseResult.success(branch);
+            result.setMsg("获取分店信息成功！分店评级：" + rank + "，分店容量：" + capacity);
+            return result;
+        }
         else
             return ResponseResult.error("获取分店信息失败!");
     }
+
     //被拦截时所运行的方法
     public ResponseResult getDefaultBranch(@PathVariable Integer branchId,BlockException e) throws Exception{
 
@@ -121,6 +136,7 @@ public class BranchController {
         result.setMsg("默认分店加载完成！"+e.getMessage());
         return result;
     }
+
     //出现异常是所运行的方法
     public ResponseResult getFallBackBranch(@PathVariable Integer branchId, Throwable e) throws Exception{
 

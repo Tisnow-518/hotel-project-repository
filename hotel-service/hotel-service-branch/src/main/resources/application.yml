@@ -9,6 +9,8 @@ spring:
       eager: true
       transport:
         dashboard: localhost:8080
+  config:
+    import: nacos:hotel-service-branch.properties, nacos:work.properties
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/hoteldb?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
